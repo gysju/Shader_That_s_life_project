@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class PostProcessCamera : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	public Material material;
+
+	void OnRenderImage( RenderTexture source, RenderTexture destination)
+	{
+		Graphics.Blit (source, destination, material);
 	}
 }
