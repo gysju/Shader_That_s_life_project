@@ -4,7 +4,7 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_Aberations("Aberation", Range(-0.5, 0.5)) = 0.0
-		_AberationsDir("AberationsDir", Vector) = (0,0,0,0)
+		_AberationsDir("AberationsDir", Vector) = (1,0,0,0)
 	}
 	SubShader
 	{
