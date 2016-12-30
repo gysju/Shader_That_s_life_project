@@ -9,15 +9,21 @@
 
 		[Header(Fur)]
 		_FurLength ( "length ", Range(0,0.5)) = 0.5
+		_FurLengthRandomIntensity ( "Fur Length Random Intensity", Range(0,1)) = 0
 		_FurLowSize ( "Low size ", Range(0,0.25)) = 0.5
 		_FurHighSize ( "High size ", Range(0,0.25)) = 0.5
-		_LowCurlIntensity (" Low curl Intensity", Range(0,1)) = 0
-		_HighCurlIntensity (" High curl Intensity", Range(0,1)) = 1
+		_LowCurlIntensity ("Low curl Intensity", Range(0,1)) = 0
+		_HighCurlIntensity ("High curl Intensity", Range(0,1)) = 1
 		_LowColor ("LowColor", Color) = (1,1,1,1)
 		_HighColor ("HighColor", Color) = (1,1,1,1)
 
 		[Header(Helper)]
 		_RandomTex("RandomTex", 2D) = "black" {}
+
+		[Header(Tesselation and deisplacement)]
+		_Tesselation("Tesselation", Range(0,10)) = 0
+		_DisplaceMap("Displace map", 2D) = "Black" {}
+		_TesselationIntensity("Tesselation Intensity", Range(0,1)) = 0.1
 	}
 	SubShader
 	{
@@ -56,14 +62,16 @@
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma geometry geom
+			#pragma domain domain
+			#pragma hull hull
 
 			#pragma multi_compile_fwdbase 
 			#include "UnityCG.cginc"
 			#include "AutoLight.cginc"
 
-			float _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity;
+			float _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, _FurLengthRandomIntensity, _TesselationIntensity;
 			float4 _LowColor, _HighColor;
-			sampler2D _RandomTex;
+			sampler2D _RandomTex, _DisplaceMap;
 
 			struct VertInput
 			{
@@ -101,6 +109,55 @@
 				return o;
 			}
 
+			#ifdef UNITY_CAN_COMPILE_TESSELLATION
+
+			struct OutputPatchConstant
+			{
+				float edge[3]	: SV_TessFactor;
+				float inside	: SV_InsideTessFactor;
+			};
+
+			OutputPatchConstant hullconst( InputPatch<GeomInput, 3> v)
+			{
+				OutputPatchConstant o;
+				o.edge[0] = o.edge[1] = o.edge[2] = o.inside = _Tesselation;
+				return o;
+			}
+
+			[domain("tri")]
+			[partitioning("fractional_odd")]
+			[outputtopology("triangle_cw")]
+			[patchconstantfunc("hullconst")]
+			[outputcontrolpoints(3)]
+
+			GeomInput hull( InputPatch<GeomInput, 3> v, uint id : SV_OutputControlPointID )
+			{
+				return v[id];
+			}
+
+			[domain("tri")]
+			GeomInput domain( OutputPatchConstant tessFactors, const OutputPatch<GeomInput, 3> vi, float3 bary : SV_DomainLocation)
+			{
+				GeomInput o;
+
+				float3 position = vi[0].position*bary.x + vi[1].position*bary.y + vi[2].position*bary.z;
+				float3 normal = vi[0].normal*bary.x + vi[1].normal*bary.y + vi[2].normal*bary.z;
+				float3 binormal = vi[0].binormal*bary.x + vi[1].binormal*bary.y + vi[2].binormal*bary.z;
+				float3 tangent = vi[0].tangent*bary.x + vi[1].tangent*bary.y + vi[2].tangent*bary.z;
+				float2 uv = vi[0].uv*bary.x + vi[1].uv*bary.y + vi[2].uv*bary.z;
+
+				float displace = tex2Dlod(_DisplaceMap, float4(uv, 0.0f, 0.0f)).g * _TesselationIntensity;
+
+				o.position = float4(position, 0.0f) + float4(normal, 0.0f) * displace;
+				o.normal = normalize(normal);
+				o.binormal = normalize(binormal);
+				o.tangent = normalize(tangent);
+				o.uv = uv;
+
+				return o;
+			}
+
+			#endif
 			void addPoint( float3 pos, float3 norm, float4 col, inout TriangleStream<FragInput> stream)
 			{
 				FragInput o;
@@ -155,7 +212,10 @@
 			float4 frag( FragInput IN ) : COLOR
 			{
 				float4 o;
-				o.rgb = IN.color;
+				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
+				float NdotL = saturate((dot(IN.normal, lightDir)));
+
+				o.rgb = IN.color * NdotL;
 				o.a = 1;
 				return o;
 			}
