@@ -10,8 +10,9 @@
 		[Header(Fur)]
 		_FurLength ( "length ", Range(0,0.5)) = 0.5
 		_FurLengthRandomIntensity ( "Fur Length Random Intensity", Range(0,1)) = 0
-		_FurLowSize ( "Low size ", Range(0,0.25)) = 0.5
-		_FurHighSize ( "High size ", Range(0,0.25)) = 0.5
+		_FurOrientationRandomIntensity ( "Fur Orientation Random Intensity", Range(0,1)) = 0
+		_FurLowSize ( "Low size ", Range(0,0.1)) = 0.05
+		_FurHighSize ( "High size ", Range(0,0.1)) = 0.05
 		_LowCurlIntensity ("Low curl Intensity", Range(0,1)) = 0
 		_HighCurlIntensity ("High curl Intensity", Range(0,1)) = 1
 		_LowColor ("LowColor", Color) = (1,1,1,1)
@@ -24,6 +25,8 @@
 		_Tesselation("Tesselation", Range(0,10)) = 0
 		_DisplaceMap("Displace map", 2D) = "Black" {}
 		_TesselationIntensity("Tesselation Intensity", Range(0,1)) = 0.1
+
+		_SpeedOffset("Speed uv offset", Range(0,1)) = 0
 	}
 	SubShader
 	{
@@ -69,7 +72,7 @@
 			#include "UnityCG.cginc"
 			#include "AutoLight.cginc"
 
-			float _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, _FurLengthRandomIntensity, _TesselationIntensity;
+			float _SpeedOffset, _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, _FurLengthRandomIntensity, _TesselationIntensity, _FurOrientationRandomIntensity;
 			float4 _LowColor, _HighColor;
 			sampler2D _RandomTex, _DisplaceMap;
 
@@ -146,7 +149,7 @@
 				float3 tangent = vi[0].tangent*bary.x + vi[1].tangent*bary.y + vi[2].tangent*bary.z;
 				float2 uv = vi[0].uv*bary.x + vi[1].uv*bary.y + vi[2].uv*bary.z;
 
-				float displace = tex2Dlod(_DisplaceMap, float4(uv, 0.0f, 0.0f)).g * _TesselationIntensity;
+				float displace = tex2Dlod(_DisplaceMap, float4(uv + float2(cos(_Time.y), sin(_Time.y)) * _SpeedOffset, 0.0f, 0.0f)).g * _TesselationIntensity;
 
 				o.position = float4(position, 0.0f) + float4(normal, 0.0f) * displace;
 				o.normal = normalize(normal);
@@ -175,10 +178,10 @@
 				float3 RandomRGB = tex2Dlod(_RandomTex, float4(uv, 0, 0)) * 2.0f - float3(1.0f,1.0f,1.0f);
 
 				float3 rootPos = pos;
-				float3 orientation = normalize(sin(RandomRGB.r * 6.28 ) * tang + cos(RandomRGB.r * 6.28) * bin); // remplaceras quand j'aurais mis le random
+				float3 orientation = normalize(sin( ( _FurOrientationRandomIntensity * RandomRGB.g ) * 6.28 ) * tang + cos( ( _FurOrientationRandomIntensity * RandomRGB.g ) * 6.28) * bin); // remplaceras quand j'aurais mis le random
 				float3 furAngleCurve = 0.0f;
 				float3 furCurveDir = cross(orientation, dir);
-
+				float furLength = _FurLength + RandomRGB.g * _FurLengthRandomIntensity;
 				addPoint( rootPos + (orientation  * _FurLowSize), dir, _LowColor, stream);
 				addPoint( rootPos - (orientation  * _FurLowSize), dir, _LowColor, stream);
 
@@ -189,7 +192,7 @@
 					float3 growDir = (cos(furAngleCurve) * dir + sin( furAngleCurve ) * furCurveDir);
 					furAngleCurve += lerp(_LowCurlIntensity, _HighCurlIntensity, relativePos);
 
-					rootPos += growDir * _FurLength/ segmentCount;
+					rootPos += growDir * furLength/ segmentCount;
 
 					addPoint( rootPos + orientation  * furSize, dir, col, stream);
 					addPoint( rootPos - orientation  * furSize, dir, col, stream);
