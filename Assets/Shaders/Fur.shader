@@ -21,12 +21,19 @@
 		[Header(Helper)]
 		_RandomTex("RandomTex", 2D) = "black" {}
 
-		[Header(Tesselation and deisplacement)]
+		[Header(Tesselation and displacement)]
 		_Tesselation("Tesselation", Range(0,10)) = 0
 		_DisplaceMap("Displace map", 2D) = "Black" {}
 		_TesselationIntensity("Tesselation Intensity", Range(0,1)) = 0.1
 
-		_SpeedOffset("Speed uv offset", Range(0,1)) = 0
+		[Header(Wind)]
+		_WindTex("WindTex", 2D) = "black" {}
+		_WindIntensity("Wind intensity", Range(-0.5,0.5)) = 0.01
+		_WindSpeedX("Wind speed X", Range(-2.0,2.0)) = 0.5
+		_WindSpeedY("Wind speed Y", Range(-2.0,2.0)) = 0.5
+
+		[Header(Gravity)]
+		_GravityForce("Gravity", Range(0,0.1)) = 0
 	}
 	SubShader
 	{
@@ -74,9 +81,12 @@
 			#include "UnityCG.cginc"
 			#include "AutoLight.cginc"
 
-			float _SpeedOffset, _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, _FurLengthRandomIntensity, _TesselationIntensity, _FurOrientationRandomIntensity;
+			float _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, 
+			_Tesselation, _FurLengthRandomIntensity, _TesselationIntensity, _FurOrientationRandomIntensity,
+			_WindIntensity, _WindSpeedX, _WindSpeedY, _GravityForce;
+
 			float4 _LowColor, _HighColor;
-			sampler2D _RandomTex, _DisplaceMap;
+			sampler2D _RandomTex, _DisplaceMap, _WindTex;
 
 			struct VertInput
 			{
@@ -152,7 +162,7 @@
 				float3 tangent = vi[0].tangent*bary.x + vi[1].tangent*bary.y + vi[2].tangent*bary.z;
 				float2 uv = vi[0].uv*bary.x + vi[1].uv*bary.y + vi[2].uv*bary.z;
 
-				float displace = tex2Dlod(_DisplaceMap, float4(uv + float2(cos(_Time.y), sin(_Time.y)) * _SpeedOffset, 0.0f, 0.0f)).g * _TesselationIntensity;
+				float displace = tex2Dlod(_DisplaceMap, float4(uv, 0.0f, 0.0f)).g * _TesselationIntensity;
 
 				o.pos = float4(pos, 0.0f) + float4(normal, 0.0f) * displace;
 				o.normal = normalize(normal);
@@ -189,6 +199,12 @@
 				addPoint( rootPos + (orientation  * _FurLowSize), dir, _LowColor, stream);
 				addPoint( rootPos - (orientation  * _FurLowSize), dir, _LowColor, stream);
 
+				float3 windOffset = tex2Dlod(_WindTex, float4(uv*0.1f + float2(_Time.x*_WindSpeedX, _Time.x*_WindSpeedY), 0, 0));
+				windOffset *= 2.0f;
+				windOffset -= float3(1.0f, 1.0f, 1.0f);
+
+				float3 windDirOffset = float3(windOffset.x, 0.0f, windOffset.y) * _WindIntensity;
+
 				for( float relativePos = relativePosStep; relativePos < 1.0f; relativePos += relativePosStep)
 				{
 					float furSize = lerp( _FurLowSize, _FurHighSize, relativePos);
@@ -197,6 +213,8 @@
 					furAngleCurve += lerp(_LowCurlIntensity, _HighCurlIntensity, relativePos);
 
 					rootPos += growDir * furLength/ segmentCount;
+					rootPos += windDirOffset;
+					rootPos -= float3( 0.0f, _GravityForce, 0.0f);
 
 					addPoint( rootPos + orientation  * furSize, dir, col, stream);
 					addPoint( rootPos - orientation  * furSize, dir, col, stream);
@@ -247,9 +265,11 @@
 			#include "UnityCG.cginc"
 			#include "AutoLight.cginc"
 
-			float _SpeedOffset, _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, _FurLengthRandomIntensity, _TesselationIntensity, _FurOrientationRandomIntensity;
+			float _FurLowSize, _FurHighSize, _FurLength, _LowCurlIntensity, _HighCurlIntensity, _Tesselation, 
+			_FurLengthRandomIntensity, _TesselationIntensity, _FurOrientationRandomIntensity, 
+			_WindIntensity, _WindSpeedX, _WindSpeedY, _GravityForce;
 			float4 _LowColor, _HighColor;
-			sampler2D _RandomTex, _DisplaceMap;
+			sampler2D _RandomTex, _DisplaceMap, _WindTex;
 
 			struct VertInput
 			{
@@ -315,6 +335,12 @@
 				addPoint( rootPos + (orientation  * _FurLowSize), dir, _LowColor, stream);
 				addPoint( rootPos - (orientation  * _FurLowSize), dir, _LowColor, stream);
 
+				float3 windOffset = tex2Dlod(_WindTex, float4(uv*0.1f + float2(_Time.x*_WindSpeedX, _Time.x*_WindSpeedY), 0, 0));
+				windOffset *= 2.0f;
+				windOffset -= float3(1.0f, 1.0f, 1.0f);
+
+				float3 windDirOffset = float3(windOffset.x, 0.0f, windOffset.y) * _WindIntensity;
+
 				for( float relativePos = relativePosStep; relativePos < 1.0f; relativePos += relativePosStep)
 				{
 					float furSize = lerp( _FurLowSize, _FurHighSize, relativePos);
@@ -323,6 +349,8 @@
 					furAngleCurve += lerp(_LowCurlIntensity, _HighCurlIntensity, relativePos);
 
 					rootPos += growDir * furLength/ segmentCount;
+					rootPos += windDirOffset;
+					rootPos -= float3( 0.0f, _GravityForce, 0.0f);
 
 					addPoint( rootPos + orientation  * furSize, dir, col, stream);
 					addPoint( rootPos - orientation  * furSize, dir, col, stream);
