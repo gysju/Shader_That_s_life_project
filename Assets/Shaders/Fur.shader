@@ -86,7 +86,7 @@
 			_WindIntensity, _WindSpeedX, _WindSpeedY, _GravityForce;
 
 			float4 _LowColor, _HighColor;
-			sampler2D _RandomTex, _DisplaceMap, _WindTex;
+			sampler2D _MainTex, _RandomTex, _DisplaceMap, _WindTex;
 
 			struct VertInput
 			{
@@ -189,6 +189,7 @@
 			{
 				const float segmentCount = 8.0f;
 				float relativePosStep = 1.0f / segmentCount;
+				float4 colorMainTex = tex2Dlod (_MainTex, float4(uv, 0,0));
 				float3 RandomRGB = tex2Dlod(_RandomTex, float4(uv, 0, 0)) * 2.0f - float3(1.0f,1.0f,1.0f);
 
 				float3 rootPos = pos;
@@ -196,14 +197,15 @@
 				float3 furAngleCurve = 0.0f;
 				float3 furCurveDir = cross(orientation, dir);
 				float furLength = _FurLength + RandomRGB.g * _FurLengthRandomIntensity;
-				addPoint( rootPos + (orientation  * _FurLowSize), dir, _LowColor, stream);
-				addPoint( rootPos - (orientation  * _FurLowSize), dir, _LowColor, stream);
+				addPoint( rootPos + (orientation  * _FurLowSize), dir, colorMainTex * _LowColor, stream);
+				addPoint( rootPos - (orientation  * _FurLowSize), dir, colorMainTex * _LowColor, stream);
 
 				float3 windOffset = tex2Dlod(_WindTex, float4(uv*0.1f + float2(_Time.x*_WindSpeedX, _Time.x*_WindSpeedY), 0, 0));
 				windOffset *= 2.0f;
 				windOffset -= float3(1.0f, 1.0f, 1.0f);
 
 				float3 windDirOffset = float3(windOffset.x, 0.0f, windOffset.y) * _WindIntensity;
+
 
 				for( float relativePos = relativePosStep; relativePos < 1.0f; relativePos += relativePosStep)
 				{
@@ -216,8 +218,8 @@
 					rootPos += windDirOffset;
 					rootPos -= float3( 0.0f, _GravityForce, 0.0f);
 
-					addPoint( rootPos + orientation  * furSize, dir, col, stream);
-					addPoint( rootPos - orientation  * furSize, dir, col, stream);
+					addPoint( rootPos + orientation  * furSize, dir, colorMainTex * col, stream);
+					addPoint( rootPos - orientation  * furSize, dir, colorMainTex * col, stream);
 				}
 			}
 
