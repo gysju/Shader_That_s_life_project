@@ -37,30 +37,47 @@
 	}
 	SubShader
 	{
-		CGPROGRAM
-		#pragma surface surf Standard fullforwardshadows
-		#pragma target 5.0
+		Tags { "RenderType"="Opaque" }
+		LOD 100
 
-		sampler2D _MainTex;
-
-		struct Input
+		Pass
 		{
-			float2 uv_MainTex;
-		};
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
 
-		half _Glossiness;
-		fixed4 _Color;
+			#include "UnityCG.cginc"
 
-		// first pass
-		void surf(Input IN, inout SurfaceOutputStandard o )
-		{
-			fixed4 c = _Color * tex2D(_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-			o.Metallic = 0.0f;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
+			struct VertInput
+			{
+				float4 pos : POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			struct FragInput
+			{
+				float4 pos : SV_POSITION;
+				float2 uv : TEXCOORD0;
+			};
+
+			sampler2D _MainTex;
+			float4 _MainTex_ST;
+			
+			FragInput vert (VertInput IN)
+			{
+				FragInput o;
+				o.pos = UnityObjectToClipPos(IN.pos);
+				o.uv = TRANSFORM_TEX(IN.uv, _MainTex);
+				return o;
+			}
+			
+			fixed4 frag (FragInput IN) : SV_Target
+			{
+				fixed4 col = tex2D(_MainTex, IN.uv);
+				return col;
+			}
+			ENDCG
 		}
-		ENDCG
 
 		// seconde pass
 		Pass
