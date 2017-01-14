@@ -11,11 +11,9 @@
 		_HexaHeight ("Cube height", Range (0.01, 1)) = 0.2
 		_HexaRandomHeight ("Cube random height intensity ", Range (0, 2)) = 0
 
-		_CubeTimeIntansity ("Cube time intansity", Range (0, 0.25)) = 0
-
+		_CubeTimeXIntansity ("Cube time X intansity ", Range (0, 0.25)) = 0
+		_CubeTimeYIntansity ("Cube time Y intansity ", Range (0, 0.25)) = 0
 		_Tesselation ("Tesselation", Range(1, 10)) = 1
-
-
 	}
 	
 	SubShader 
@@ -37,7 +35,7 @@
 
 			sampler2D _MainTex, _RandomTex;
 			float4 _RandomTex_ST;
-			float _HexaSize, _HexaHeight, _Tesselation, _HexaRandomHeight, _CubeTimeIntansity;
+			float _HexaSize, _HexaHeight, _Tesselation, _HexaRandomHeight, _CubeTimeXIntansity, _CubeTimeYIntansity;
 
 			struct VertInput
 			{
@@ -139,36 +137,39 @@
 			{
 				float4 colorMainTex = tex2Dlod (_MainTex, float4(uv, 0,0));
 				float3 RandomRGB = tex2Dlod(_RandomTex, float4(uv * _RandomTex_ST.xy + _RandomTex_ST.wz, 0, 0)) * 2.0f - float3(1.0f,1.0f,1.0f);
-				float GeomLength = saturate(_HexaHeight + RandomRGB.g * _HexaRandomHeight + sin(_Time.y * RandomRGB.b) * 0.5) ;
+				float GeomLength = saturate(_HexaHeight + RandomRGB.g * _HexaRandomHeight + sin(_Time.y * RandomRGB.b) * _CubeTimeYIntansity) ;
 
-				pos += float3( sin(_Time.y * RandomRGB.b) * _CubeTimeIntansity, 0,cos(_Time.y * RandomRGB.b) * _CubeTimeIntansity); 
+				pos += float3( sin(_Time.y * RandomRGB.b) * _CubeTimeXIntansity, 0,cos(_Time.y * RandomRGB.b) * _CubeTimeXIntansity); 
 
-				//left
-				addPoint ( pos - _HexaSize * tang, norm, colorMainTex, stream);
-				addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
+				if ( GeomLength > 0)
+				{
+					//left
+					addPoint ( pos - _HexaSize * tang, norm, colorMainTex, stream);
+					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
 
-				//up
-				addPoint ( pos + _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
-				addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
+					//up
+					addPoint ( pos + _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
+					addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
 
-				// right
-				addPoint ( pos + _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
-				addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+					// right
+					addPoint ( pos + _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
+					addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
 
-				// down
-				addPoint ( pos - _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
-				addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
+					// down
+					addPoint ( pos - _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
+					addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
 
-				//left
-				addPoint ( pos - _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
-				addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
+					//left
+					addPoint ( pos - _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
+					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
 
-				//cover
+					//cover
 
-				addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
-				addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
-				addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
-				addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+					addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
+					addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+					addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
+					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+				}
 			}
 
 			[maxvertexcount(24)]
