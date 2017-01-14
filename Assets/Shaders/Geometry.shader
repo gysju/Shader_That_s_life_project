@@ -2,18 +2,19 @@
 {
 	Properties 
 	{
+		_Mask("Mask", Int) = 0
 		_Color ("Color", Color) = (1,1,1,1)
 		[NoScaleOffset] _MainTex ("Albedo (RGB)", 2D) = "white" {}
 		[NoScaleOffset] _RandomTex ("Random", 2D) = "white" {}
 
 		[Header(Cube helper)]
-		_HexaSize ("Cube size", Range (0.01, 0.05)) = 0.025
-		_HexaHeight ("Cube height", Range (0.01, 1)) = 0.2
+		_HexaSize ("Cube size", Range (0.001, 0.05)) = 0.025
+		_HexaHeight ("Cube height", Range (0.001, .5)) = 0.2
 		_HexaRandomHeight ("Cube random height intensity ", Range (0, 2)) = 0
 
 		_CubeTimeXIntansity ("Cube time X intansity ", Range (0, 0.25)) = 0
 		_CubeTimeYIntansity ("Cube time Y intansity ", Range (0, 0.25)) = 0
-		_Tesselation ("Tesselation", Range(1, 10)) = 1
+		_Tesselation ("Tesselation", Range(1, 20)) = 1
 	}
 	
 	SubShader 
@@ -21,6 +22,14 @@
 		Pass
 		{
 			Cull Off
+			Stencil
+			{
+				Ref[_Mask]
+				Comp equal
+				Pass keep
+				Fail keep
+			}
+
 			CGPROGRAM
 
 			#pragma target 5.0
@@ -150,30 +159,30 @@
 				{
 					//left
 					addPoint ( pos - _HexaSize * tang, norm, colorMainTex, stream);
-					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
+					addPoint ( pos - _HexaSize * tang + norm * GeomLength, norm, colorMainTex, stream); // gauche
 
 					//up
 					addPoint ( pos + _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
-					addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
+					addPoint ( pos + _HexaSize * bin + norm * GeomLength, norm, colorMainTex, stream); // haut gauche
 
 					// right
 					addPoint ( pos + _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
-					addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+					addPoint ( pos + _HexaSize * tang + norm * GeomLength, norm, colorMainTex, stream); // droite
 
 					// down
 					addPoint ( pos - _HexaSize * bin, norm, float4(0.3,0.3,0.3,1), stream);
-					addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // haut gauche
+					addPoint ( pos - _HexaSize * bin + norm * GeomLength, norm, colorMainTex, stream); // haut gauche
 
 					//left
 					addPoint ( pos - _HexaSize * tang, norm, float4(0.3,0.3,0.3,1), stream);
-					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // gauche
+					addPoint ( pos - _HexaSize * tang + norm * GeomLength, norm, colorMainTex, stream); // gauche
 
 					//cover
 
-					addPoint ( pos + _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
-					addPoint ( pos + _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
-					addPoint ( pos - _HexaSize * bin + float3( 0, GeomLength, 0), norm,  colorMainTex, stream); // haut gauche
-					addPoint ( pos - _HexaSize * tang + float3( 0, GeomLength, 0), norm, colorMainTex, stream); // droite
+					addPoint ( pos + _HexaSize * bin + norm * GeomLength, norm,  colorMainTex, stream); // haut gauche
+					addPoint ( pos + _HexaSize * tang + norm * GeomLength, norm, colorMainTex, stream); // droite
+					addPoint ( pos - _HexaSize * bin + norm * GeomLength, norm,  colorMainTex, stream); // haut gauche
+					addPoint ( pos - _HexaSize * tang + norm * GeomLength, norm, colorMainTex, stream); // droite
 				}
 			}
 

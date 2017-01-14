@@ -43,7 +43,7 @@
 			Noise.gb -= 1.0f;
 
 			float3 localPos = IN.worldPos - mul( unity_ObjectToWorld, float4(0,0,0,1)).xyz;
-			localPos.y += _VerticalSize * 0.5;
+			localPos.y += _VerticalSize * 0.5f;
 
 			float height = _VerticalSize * _VerticalValue + _StripeSize;
 			float s = sin((localPos.x * localPos.y) * _WaveFrequence  + _Time.y) * _WaveIntensity;

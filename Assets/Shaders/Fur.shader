@@ -22,7 +22,7 @@
 		_RandomTex("RandomTex", 2D) = "black" {}
 
 		[Header(Tesselation and displacement)]
-		_Tesselation("Tesselation", Range(0,10)) = 0
+		_Tesselation("Tesselation", Range(0,40)) = 0
 		_DisplaceMap("Displace map", 2D) = "Black" {}
 		_TesselationIntensity("Tesselation Intensity", Range(0,1)) = 0.1
 
@@ -40,44 +40,25 @@
 		Tags { "RenderType"="Opaque" }
 		LOD 100
 
-		Pass
+		CGPROGRAM
+		#pragma surface surf Standard fullforwardshadows
+		#pragma target 5.0
+
+		#include "UnityCG.cginc"
+
+		struct Input
 		{
-			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
+			float2 uv_MainTex;
+		};
 
-			#include "UnityCG.cginc"
+		sampler2D _MainTex;
 
-			struct VertInput
-			{
-				float4 pos : POSITION;
-				float2 uv : TEXCOORD0;
-			};
-
-			struct FragInput
-			{
-				float4 pos : SV_POSITION;
-				float2 uv : TEXCOORD0;
-			};
-
-			sampler2D _MainTex;
-			float4 _MainTex_ST;
-			
-			FragInput vert (VertInput IN)
-			{
-				FragInput o;
-				o.pos = UnityObjectToClipPos(IN.pos);
-				o.uv = TRANSFORM_TEX(IN.uv, _MainTex);
-				return o;
-			}
-			
-			fixed4 frag (FragInput IN) : SV_Target
-			{
-				fixed4 col = tex2D(_MainTex, IN.uv);
-				return col;
-			}
-			ENDCG
+		void surf (Input IN, inout SurfaceOutputStandard o) 
+		{
+			o.Albedo = tex2D(_MainTex, IN.uv_MainTex);
+			o.Alpha = 1;
 		}
+		ENDCG
 
 		// seconde pass
 		Pass

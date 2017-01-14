@@ -12,6 +12,8 @@
 
 		_Effect ("Effect", 2D) = "black" {}
 
+		_PanIntensity("pan intensity", Range(0,1)) = 0.1
+
 		[header(tesselation)]
 
 		_Tessalation("Tesselation", Range(1, 100)) = 1
@@ -32,7 +34,7 @@
 
 		sampler2D _MainTex, _Normal, _Crack, _Effect, _Height;
 		float4 _CrackLowColor, _CrackHighColor;
-		float _SpeedSpan, _CrackLowIntensity, _CrackHighIntensity, _Tessalation, _Displacement, _CrackDisplacement;
+		float _SpeedSpan, _CrackLowIntensity, _CrackHighIntensity, _Tessalation, _Displacement, _CrackDisplacement, _PanIntensity;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -46,18 +48,18 @@
 
 		void vert( inout appdata_full v )
 		{
-			float crack = tex2Dlod( _Crack, float4( v.texcoord.xy * 4, 0, 0)).g * _CrackDisplacement;
-			float height = tex2Dlod ( _Height, float4( v.texcoord.xy * 4 , 0, 0)).g * _Displacement;
+			float crack = tex2Dlod( _Crack, float4( v.texcoord.xy - float2( _Time.y * _PanIntensity, 0), 0, 0)).g * _CrackDisplacement;
+			float height = tex2Dlod ( _Height, float4( v.texcoord.xy - float2( _Time.y * _PanIntensity, 0) , 0, 0)).g * _Displacement;
 			v.vertex.xyz += v.normal * height;
 			v.vertex.xyz += v.normal * crack;
 
 		}
 		void surf (Input IN, inout SurfaceOutputStandard o) 
 		{
-			fixed4 c = tex2D ( _MainTex, IN.uv_MainTex);
-			fixed3 N = UnpackNormal(tex2D ( _Normal, IN.uv_MainTex)); 
-			fixed crack = tex2D( _Crack, IN.uv_Crack);
-			fixed effect = tex2D( _Effect, IN.uv_Crack * 5 + float2(0, _Time.y * _SpeedSpan)) * 0.5;
+			fixed4 c = tex2D ( _MainTex, IN.uv_MainTex - float2( _Time.y * _PanIntensity, 0));
+			fixed3 N = UnpackNormal(tex2D ( _Normal, IN.uv_MainTex - float2( _Time.y * _PanIntensity, 0) )); 
+			fixed crack = tex2D( _Crack, IN.uv_Crack - float2( _Time.y * _PanIntensity, 0));
+			fixed effect = tex2D( _Effect, IN.uv_Crack - float2((_Time.y * _PanIntensity) + ( _Time.y * _SpeedSpan ), 0)) * 0.5;
 
 			float4 finalColor = lerp(_CrackLowColor, _CrackHighColor, effect);
 
