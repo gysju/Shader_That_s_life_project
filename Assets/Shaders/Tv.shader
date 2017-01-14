@@ -2,7 +2,7 @@
 	Properties {
 		_MainTex ("MainTex", 2D) = "white" {}
 		_Color("Color", Color) = (1,1,1,1)
-		_Tesselation("Tesselation", Range(1,20)) = 1
+		_Tesselation("Tesselation", Range(1,100)) = 1
 
 		[Header(Effect)]
 		_LookAt ("LookAt", 2D) = "black" {}

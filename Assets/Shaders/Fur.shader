@@ -6,6 +6,7 @@
 		_MainTex("MainTex", 2D) = "black" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0
 		_Color ("BaseColor", Color) = (1,1,1,1)
+		_Mask("Mask", Int) = 0
 
 		[Header(Fur)]
 		_FurLength ( "length ", Range(0,0.5)) = 0.5
@@ -37,6 +38,14 @@
 	}
 	SubShader
 	{
+		Stencil
+		{
+			Ref[_Mask]
+			Comp equal
+			Pass keep
+			Fail keep
+		}
+
 		Tags { "RenderType"="Opaque" }
 		LOD 100
 
@@ -64,7 +73,13 @@
 		Pass
 		{
 			Cull Off
-
+			Stencil
+			{
+				Ref[_Mask]
+				Comp equal
+				Pass keep
+				Fail keep
+			}
 			Tags{ "LightMode" = "ForwardBase" }
 			CGPROGRAM
 			#pragma target 5.0
