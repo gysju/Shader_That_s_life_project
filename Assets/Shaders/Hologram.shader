@@ -1,5 +1,7 @@
 ﻿Shader "Exam/Hologram" {
 	Properties {
+		_Mask("Mask", Int) = 0
+
 		_MainTex("Main Texture", 2D) = "black" {}
 		_NoiseTex("Noise Texture", 2D) = "black" {}
 		_EmissiveColor ("Emissive color", Color) = (1,1,1,1)
@@ -14,6 +16,13 @@
 	}
 	SubShader 
 	{
+		Stencil
+		{
+			Ref[_Mask]
+			Comp equal
+			Pass keep
+			Fail keep
+		}
 		Tags { "RenderType"="Transparent" "Queue"="Transparent" }
 		LOD 200
 
