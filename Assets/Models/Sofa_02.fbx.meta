@@ -1,0 +1,127 @@
+fileFormatVersion: 2
+guid: 1c66af4d403f33547a3c99ce2411b730
+timeCreated: 1484409703
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: sofa:bas2
+    100002: sofa:bois1
+    100004: sofa:Box003
+    100006: sofa:Box004
+    100008: sofa:bras3
+    100010: sofa:bras4
+    100012: sofa:Object004
+    100014: sofa:Object005
+    100016: sofa:Object006
+    100018: sofa:Plane003
+    100020: //RootNode
+    400000: sofa:bas2
+    400002: sofa:bois1
+    400004: sofa:Box003
+    400006: sofa:Box004
+    400008: sofa:bras3
+    400010: sofa:bras4
+    400012: sofa:Object004
+    400014: sofa:Object005
+    400016: sofa:Object006
+    400018: sofa:Plane003
+    400020: //RootNode
+    2300000: sofa:bas2
+    2300002: sofa:bois1
+    2300004: sofa:Box003
+    2300006: sofa:Box004
+    2300008: sofa:bras3
+    2300010: sofa:bras4
+    2300012: sofa:Object004
+    2300014: sofa:Object005
+    2300016: sofa:Object006
+    2300018: sofa:Plane003
+    3300000: sofa:bas2
+    3300002: sofa:bois1
+    3300004: sofa:Box003
+    3300006: sofa:Box004
+    3300008: sofa:bras3
+    3300010: sofa:bras4
+    3300012: sofa:Object004
+    3300014: sofa:Object005
+    3300016: sofa:Object006
+    3300018: sofa:Plane003
+    4300000: sofa:Object004
+    4300002: sofa:Object005
+    4300004: sofa:bras3
+    4300006: sofa:bras4
+    4300008: sofa:Object006
+    4300010: sofa:Box003
+    4300012: sofa:bois1
+    4300014: sofa:Plane003
+    4300016: sofa:bas2
+    4300018: sofa:Box004
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1.8
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 0
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
