@@ -16,6 +16,8 @@ ModelImporter:
     100016: transform3
     100018: transform4
     100020: //RootNode
+    100022: Ecran
+    100024: TV
     400000: lowpoly1
     400002: pCube10
     400004: pCube11
@@ -27,12 +29,20 @@ ModelImporter:
     400016: transform3
     400018: transform4
     400020: //RootNode
+    400022: Ecran
+    400024: TV
     2300000: lowpoly1
     2300002: polySurface6
+    2300004: Ecran
+    2300006: TV
     3300000: lowpoly1
     3300002: polySurface6
+    3300004: Ecran
+    3300006: TV
     4300000: polySurface6
     4300002: lowpoly1
+    4300004: Ecran
+    4300006: TV
   materials:
     importMaterials: 1
     materialName: 0
