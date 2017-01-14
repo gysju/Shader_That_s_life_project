@@ -2,11 +2,11 @@
 	Properties {
 		_MainTex ("MainTex", 2D) = "white" {}
 		_Color("Color", Color) = (1,1,1,1)
-		_Tesselation("Tesselation", Range(1,100)) = 1
 
 		[Header(Effect)]
-		_LookAt ("LookAt", 2D) = "black" {}
+		_Lut ("LookAt", 2D) = "black" {}
 		_DisplacementIntensity ("Displacement Intensity", Range( 0, 1)) = 0
+		_Tesselation("Tesselation", Range(1,100)) = 1
 		[Space(10)]
 		_TimeSpeedVertical ("Time speed for ligne UV Decal ", Range( 0, .5)) = 0
 		_TimeSpeedHorizontal ("Time speed for ligne UV Decal ", Range( 0, .5)) = 0
@@ -20,12 +20,12 @@
 		#pragma surface surf Standard fullforwardshadows vertex:vert tessellate:tess
 		#pragma target 5.0
 
-		sampler2D _MainTex, _LookAt;
+		sampler2D _MainTex, _Lut;
 		float _Tesselation, _TimeSpeedVertical, _TimeSpeedHorizontal, _DisplacementIntensity;
 
 		struct Input {
 			float2 uv_MainTex;
-			float2 uv_LookAt;
+			float2 uv_Lut;
 		};
 
 		fixed4 _Color;
@@ -42,8 +42,8 @@
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			float background = tex2D( _LookAt, float2( IN.uv_LookAt.y + _Time.y * _TimeSpeedVertical, IN.uv_LookAt.x )).b;
-			float lookAt_g = tex2D( _LookAt, IN.uv_LookAt * 0.0001 + float2(_Time.y * _TimeSpeedHorizontal, 0.0f)).g;
+			float background = tex2D( _Lut, float2( IN.uv_Lut.y + _Time.y * _TimeSpeedVertical, IN.uv_Lut.x )).b;
+			float lookAt_g = tex2D( _Lut, IN.uv_Lut * 0.0001 + float2(_Time.y * _TimeSpeedHorizontal, 0.0f)).g;
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex + float2( 0, lookAt_g)) * _Color;
 			o.Albedo = saturate (c.rgb + (background * 0.1));
 			o.Metallic = 0;

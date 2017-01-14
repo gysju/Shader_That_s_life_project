@@ -1,16 +1,22 @@
 ﻿Shader "Exam/Hologram" {
 	Properties {
+		[Header(Main)]
+
 		_Mask("Mask", Int) = 0
 
 		_MainTex("Main Texture", 2D) = "black" {}
 		_NoiseTex("Noise Texture", 2D) = "black" {}
 		_EmissiveColor ("Emissive color", Color) = (1,1,1,1)
+		[Header(Stripe)]
+
 		_VerticalValue ("vertical value", Range(0,1)) = 1.0
 		_VerticalSize ("vertical Size", float) = 2.0
 		_StripeColor ("Stripe color", Color) = (1,1,1,1)
 		_StripeSize ("Stripe Size ( normalize )", Range( 0.0, 0.5)) = 0.1
 
 		_EmissiveIntensity ("Emissive intensity", Range(1,5)) = 1.0
+
+		[Header(wave effect)]
 		_WaveIntensity ("Wave intensity", Range (0,0.1)) = 0
 		_WaveFrequence ("Wave frequence", Range(1,50)) = 1
 	}

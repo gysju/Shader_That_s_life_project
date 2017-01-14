@@ -3,6 +3,8 @@
 	Properties 
 	{
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
+
+		[Header(Wave system)]
 		_WaveSpeed("Speed", Range(0,2)) = 0.5
 		_WaveAmplitude("Amplitude", Range(0,1)) = 0.5
 		_WaveFrequence("Frequence", Range(0,1)) = 0.5
