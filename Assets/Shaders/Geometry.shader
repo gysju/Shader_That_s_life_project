@@ -3,8 +3,8 @@
 	Properties 
 	{
 		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_RandomTex ("Random", 2D) = "white" {}
+		[NoScaleOffset] _MainTex ("Albedo (RGB)", 2D) = "white" {}
+		[NoScaleOffset] _RandomTex ("Random", 2D) = "white" {}
 
 		[Header(Cube helper)]
 		_HexaSize ("Cube size", Range (0.01, 0.05)) = 0.025
@@ -48,10 +48,9 @@
 			struct GeomInput
 			{
 				float4 pos 		: POSITION;
-				float3 normal	: NORMAL;
-				float3 binormal	: BINORMAL;
-				float3 tangent	: TANGENT;
-				float2 uv		: TEXCOORD0;
+				float4 normal_u	: ATTR0;
+				float4 tangent_v: ATTR1;
+				float3 binormal	: ATTR2;
 			};
 
 			struct FragInput
@@ -66,10 +65,13 @@
 				GeomInput geomInput;
 
 				geomInput.pos = mul(unity_ObjectToWorld, IN.pos);
-				geomInput.normal = normalize(mul(unity_ObjectToWorld, float4(IN.normal, 0.0f)).xyz);
-				geomInput.tangent = normalize(mul(unity_ObjectToWorld, float4(IN.tangent, 0.0f)).xyz);
-				geomInput.binormal = cross(geomInput.normal, geomInput.tangent);
-				geomInput.uv = IN.uv;
+				geomInput.normal_u = normalize(mul(unity_ObjectToWorld, float4(IN.normal, 0.0f)));
+				geomInput.tangent_v = normalize(mul(unity_ObjectToWorld, float4(IN.tangent, 0.0f)));
+				geomInput.binormal = cross(geomInput.normal_u.xyz, geomInput.tangent_v.xyz);
+
+				geomInput.normal_u.w = IN.uv.x;
+				geomInput.tangent_v.w = IN.uv.y;
+
 				return geomInput;
 			}
 
@@ -105,17 +107,20 @@
 				GeomInput o;
 
 				float3 pos = vi[0].pos*bary.x + vi[1].pos*bary.y + vi[2].pos*bary.z;
-				float3 normal = vi[0].normal*bary.x + vi[1].normal*bary.y + vi[2].normal*bary.z;
+				float3 normal = (vi[0].normal_u*bary.x + vi[1].normal_u*bary.y + vi[2].normal_u*bary.z).xyz;
+				float3 tangent = (vi[0].tangent_v*bary.x + vi[1].tangent_v*bary.y + vi[2].tangent_v*bary.z).xyz;
 				float3 binormal = vi[0].binormal*bary.x + vi[1].binormal*bary.y + vi[2].binormal*bary.z;
-				float3 tangent = vi[0].tangent*bary.x + vi[1].tangent*bary.y + vi[2].tangent*bary.z;
-				float2 uv = vi[0].uv*bary.x + vi[1].uv*bary.y + vi[2].uv*bary.z;
+
+				float2 uv = float2( vi[0].normal_u.w, vi[0].tangent_v.w)*bary.x + float2( vi[1].normal_u.w, vi[1].tangent_v.w)*bary.y + float2( vi[2].normal_u.w, vi[2].tangent_v.w)*bary.z;
 
 
 				o.pos = float4(pos, 0.0f);
-				o.normal = normalize(normal);
+				o.normal_u = float4(normalize(normal), 0.0f);
+				o.tangent_v = float4(normalize(tangent), 0.0f);
 				o.binormal = normalize(binormal);
-				o.tangent = normalize(tangent);
-				o.uv = uv;
+
+				o.normal_u.w = uv.x;
+				o.tangent_v.w = uv.y;
 
 				return o;
 			}
@@ -176,10 +181,10 @@
 			void geom(triangle GeomInput IN[3], inout TriangleStream<FragInput> stream)
 			{
 				float3 center = ( IN[0].pos + IN[1].pos + IN[2].pos) / 3.0f;
-				float3 norm = ( IN[0].normal + IN[1].normal + IN[2].normal) / 3.0f;
+				float3 norm = ( IN[0].normal_u + IN[1].normal_u + IN[2].normal_u).xyz / 3.0f;
 				float3 tang = ( IN[0].binormal + IN[1].binormal + IN[2].binormal) / 3.0f;
-				float3 bin = ( IN[0].tangent + IN[1].tangent + IN[2].tangent) / 3.0f;
-				float2 uv = ( IN[0].uv + IN[1].uv + IN[2].uv) / 3.0f;	
+				float3 bin = ( IN[0].tangent_v + IN[1].tangent_v + IN[2].tangent_v).xyz / 3.0f;
+				float2 uv = ( float2(IN[0].normal_u.w, IN[0].tangent_v.w) + float2(IN[1].normal_u.w, IN[1].tangent_v.w) + float2(IN[2].normal_u.w, IN[2].tangent_v.w)) / 3.0f;	
 
 				addGeom( center, norm, tang, bin, uv, stream);	
 			}
