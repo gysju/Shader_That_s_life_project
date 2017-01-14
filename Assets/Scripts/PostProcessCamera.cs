@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class PostProcessCamera : MonoBehaviour {
 
-	public Material material;
+	public Material firstEffect;
+    public Material secondeEffect;
 
-	void OnRenderImage( RenderTexture source, RenderTexture destination)
+    public bool useFirstEffect = true;
+    void OnRenderImage( RenderTexture source, RenderTexture destination)
 	{
-		Graphics.Blit (source, destination, material);
-	}
+        if( useFirstEffect == true)
+	    {
+            Graphics.Blit (source, destination, firstEffect);
+        }
+        else
+            Graphics.Blit(source, destination, secondeEffect);
+    }
 }
