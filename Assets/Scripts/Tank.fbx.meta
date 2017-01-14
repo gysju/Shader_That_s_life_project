@@ -1,0 +1,176 @@
+fileFormatVersion: 2
+guid: 55d42ecc27993d34bb53b29f288676c1
+timeCreated: 1483904133
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Tank_BackLeft_Leg
+    100004: Tank_BackLeft_Leg2
+    100006: Tank_BackLeft_Wheel
+    100008: Tank_BackLeft_WRoot
+    100010: Tank_BackRight_Leg
+    100012: Tank_BackRight_Leg2
+    100014: Tank_BackRight_Wheel
+    100016: Tank_BackRight_WRoot
+    100018: Tank_Cannon
+    100020: Tank_Fabric
+    100022: Tank_FrontLeft_Leg
+    100024: Tank_FrontLeft_Leg2
+    100026: Tank_FrontLeft_Wheel
+    100028: Tank_FrontLeft_WRoot
+    100030: Tank_FrontRight_Leg
+    100032: Tank_FrontRight_Leg2
+    100034: Tank_FrontRight_Wheel
+    100036: Tank_FrontRight_WRoot
+    100038: Tank_Turret
+    400000: //RootNode
+    400002: Tank_BackLeft_Leg
+    400004: Tank_BackLeft_Leg2
+    400006: Tank_BackLeft_Wheel
+    400008: Tank_BackLeft_WRoot
+    400010: Tank_BackRight_Leg
+    400012: Tank_BackRight_Leg2
+    400014: Tank_BackRight_Wheel
+    400016: Tank_BackRight_WRoot
+    400018: Tank_Cannon
+    400020: Tank_Fabric
+    400022: Tank_FrontLeft_Leg
+    400024: Tank_FrontLeft_Leg2
+    400026: Tank_FrontLeft_Wheel
+    400028: Tank_FrontLeft_WRoot
+    400030: Tank_FrontRight_Leg
+    400032: Tank_FrontRight_Leg2
+    400034: Tank_FrontRight_Wheel
+    400036: Tank_FrontRight_WRoot
+    400038: Tank_Turret
+    2300000: //RootNode
+    2300002: Tank_BackLeft_Leg
+    2300004: Tank_BackLeft_Leg2
+    2300006: Tank_BackLeft_Wheel
+    2300008: Tank_BackLeft_WRoot
+    2300010: Tank_BackRight_Leg
+    2300012: Tank_BackRight_Leg2
+    2300014: Tank_BackRight_Wheel
+    2300016: Tank_BackRight_WRoot
+    2300018: Tank_Cannon
+    2300020: Tank_Fabric
+    2300022: Tank_FrontLeft_Leg
+    2300024: Tank_FrontLeft_Leg2
+    2300026: Tank_FrontLeft_Wheel
+    2300028: Tank_FrontLeft_WRoot
+    2300030: Tank_FrontRight_Leg
+    2300032: Tank_FrontRight_Leg2
+    2300034: Tank_FrontRight_Wheel
+    2300036: Tank_FrontRight_WRoot
+    2300038: Tank_Turret
+    3300000: //RootNode
+    3300002: Tank_BackLeft_Leg
+    3300004: Tank_BackLeft_Leg2
+    3300006: Tank_BackLeft_Wheel
+    3300008: Tank_BackLeft_WRoot
+    3300010: Tank_BackRight_Leg
+    3300012: Tank_BackRight_Leg2
+    3300014: Tank_BackRight_Wheel
+    3300016: Tank_BackRight_WRoot
+    3300018: Tank_Cannon
+    3300020: Tank_Fabric
+    3300022: Tank_FrontLeft_Leg
+    3300024: Tank_FrontLeft_Leg2
+    3300026: Tank_FrontLeft_Wheel
+    3300028: Tank_FrontLeft_WRoot
+    3300030: Tank_FrontRight_Leg
+    3300032: Tank_FrontRight_Leg2
+    3300034: Tank_FrontRight_Wheel
+    3300036: Tank_FrontRight_WRoot
+    3300038: Tank_Turret
+    4300000: Tank_Body
+    4300002: Tank_Fabric
+    4300004: Tank_FrontLeft_Leg
+    4300006: Tank_FrontLeft_Leg2
+    4300008: Tank_FrontLeft_WRoot
+    4300010: Tank_FrontLeft_Wheel
+    4300012: Tank_FrontRight_Leg
+    4300014: Tank_FrontRight_Leg2
+    4300016: Tank_FrontRight_WRoot
+    4300018: Tank_FrontRight_Wheel
+    4300020: Tank_BackLeft_Leg
+    4300022: Tank_BackLeft_Leg2
+    4300024: Tank_BackLeft_WRoot
+    4300026: Tank_BackLeft_Wheel
+    4300028: Tank_BackRight_Leg
+    4300030: Tank_BackRight_Leg2
+    4300032: Tank_BackRight_WRoot
+    4300034: Tank_BackRight_Wheel
+    4300036: Tank_Turret
+    4300038: Tank_Cannon
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

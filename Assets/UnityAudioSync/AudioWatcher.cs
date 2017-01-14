@@ -156,6 +156,7 @@ public class AudioWatcher : MonoBehaviour
             splSum += bandData[band + offset].SPL;
         }
 
+		Debug.Log (splSum / numBands);
         return splSum / numBands;
     }
 } 
