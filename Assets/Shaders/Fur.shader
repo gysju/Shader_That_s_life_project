@@ -4,8 +4,6 @@
 	{
 		[Header(Base)]
 		_MainTex("MainTex", 2D) = "black" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0
-		_Color ("BaseColor", Color) = (1,1,1,1)
 		_Mask("Mask", Int) = 0
 
 		[Header(Fur)]

@@ -9,9 +9,12 @@
 
 		[Header(Cube helper)]
 		_HexaSize ("Cube size", Range (0.001, 0.05)) = 0.025
+		[Space(10)]
+
 		_HexaHeight ("Cube height", Range (0.001, .5)) = 0.2
 		_HexaRandomHeight ("Cube random height intensity ", Range (0, 2)) = 0
 
+		[Space(10)]
 		_CubeTimeXIntansity ("Cube time X intansity ", Range (0, 0.25)) = 0
 		_CubeTimeYIntansity ("Cube time Y intansity ", Range (0, 0.25)) = 0
 		_Tesselation ("Tesselation", Range(1, 20)) = 1
