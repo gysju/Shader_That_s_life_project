@@ -17,7 +17,7 @@
 		[Space(10)]
 		_CubeTimeXIntansity ("Cube time X intansity ", Range (0, 0.25)) = 0
 		_CubeTimeYIntansity ("Cube time Y intansity ", Range (0, 0.25)) = 0
-		_Tesselation ("Tesselation", Range(1, 20)) = 1
+		_Tesselation ("Tesselation", Range(1, 50)) = 1
 	}
 	
 	SubShader 
