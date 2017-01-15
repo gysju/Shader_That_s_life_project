@@ -37,6 +37,7 @@ ModelImporter:
     2300014: sofa:Object005
     2300016: sofa:Object006
     2300018: sofa:Plane003
+    2300020: //RootNode
     3300000: sofa:bas2
     3300002: sofa:bois1
     3300004: sofa:Box003
@@ -47,6 +48,7 @@ ModelImporter:
     3300014: sofa:Object005
     3300016: sofa:Object006
     3300018: sofa:Plane003
+    3300020: //RootNode
     4300000: sofa:Object004
     4300002: sofa:Object005
     4300004: sofa:bras3
@@ -57,6 +59,7 @@ ModelImporter:
     4300014: sofa:Plane003
     4300016: sofa:bas2
     4300018: sofa:Box004
+    4300020: sofa:sofa:Plane002
   materials:
     importMaterials: 1
     materialName: 0
